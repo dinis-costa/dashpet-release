@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DashPet" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=DESKTOP-JIGRCDB;Initial Catalog=DashPet;Integrated Security=True" SettingsObjectName="DashPetApp.Properties.Settings" SettingsPropertyName="DashPetConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.AnimalClass" Member="AnimalClasses">
+    <Type Name="AnimalClass">
+      <Column Name="animalclass_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="animalclass_name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="AnimalClass_AnimalSpecies" Member="AnimalSpecies" ThisKey="animalclass_id" OtherKey="animalspecies_animalclass_id" Type="AnimalSpecies" />
+    </Type>
+  </Table>
+  <Table Name="dbo.AnimalSpecies" Member="AnimalSpecies">
+    <Type Name="AnimalSpecies">
+      <Column Name="animalspecies_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="animalspecies_name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="animalspecies_animalclass_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="AnimalSpecies_Pet" Member="Pets" ThisKey="animalspecies_id" OtherKey="pet_animalspecies_id" Type="Pet" />
+      <Association Name="AnimalClass_AnimalSpecies" Member="AnimalClass" ThisKey="animalspecies_animalclass_id" OtherKey="animalclass_id" Type="AnimalClass" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Appointment" Member="Appointments">
+    <Type Name="Appointment">
+      <Column Name="appt_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="appt_pet_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="appt_vet_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="appt_date" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="appt_timeslot_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="appt_service_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="appt_notes" Type="System.String" DbType="VarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="appt_status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Pet_Appointment" Member="Pet" ThisKey="appt_pet_id" OtherKey="pet_id" Type="Pet" IsForeignKey="true" />
+      <Association Name="Service_Appointment" Member="Service" ThisKey="appt_service_id" OtherKey="service_id" Type="Service" IsForeignKey="true" />
+      <Association Name="TimeSlot_Appointment" Member="TimeSlot" ThisKey="appt_timeslot_id" OtherKey="timeslot_id" Type="TimeSlot" IsForeignKey="true" />
+      <Association Name="Vet_Appointment" Member="Vet" ThisKey="appt_vet_id" OtherKey="vet_id" Type="Vet" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Owner" Member="Owners">
+    <Type Name="Owner">
+      <Column Name="owner_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="owner_name" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="owner_doc" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="owner_phone" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="owner_address" Type="System.String" DbType="VarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="owner_email" Type="System.String" DbType="VarChar(320) NOT NULL" CanBeNull="false" />
+      <Column Name="owner_status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="owner_timestamp" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
+      <Association Name="Owner_Pet" Member="Pets" ThisKey="owner_id" OtherKey="pet_owner_id" Type="Pet" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Pet" Member="Pets">
+    <Type Name="Pet">
+      <Column Name="pet_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="pet_owner_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="pet_name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="pet_animalspecies_id" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="pet_dob" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="pet_weight" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="pet_sex" Type="System.String" DbType="VarChar(3) NOT NULL" CanBeNull="false" />
+      <Column Name="pet_notes" Type="System.String" DbType="VarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="pet_status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="pet_timestamp" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
+      <Association Name="Pet_Appointment" Member="Appointments" ThisKey="pet_id" OtherKey="appt_pet_id" Type="Appointment" />
+      <Association Name="AnimalSpecies_Pet" Member="AnimalSpecies" ThisKey="pet_animalspecies_id" OtherKey="animalspecies_id" Type="AnimalSpecies" IsForeignKey="true" />
+      <Association Name="Owner_Pet" Member="Owner" ThisKey="pet_owner_id" OtherKey="owner_id" Type="Owner" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Room" Member="Rooms">
+    <Type Name="Room">
+      <Column Name="room_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="room_name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="room_status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Room_Vet" Member="Vets" ThisKey="room_id" OtherKey="vet_room_id" Type="Vet" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Service" Member="Services">
+    <Type Name="Service">
+      <Column Name="service_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="service_name" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="service_price" Type="System.String" DbType="VarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="service_status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Service_Appointment" Member="Appointments" ThisKey="service_id" OtherKey="appt_service_id" Type="Appointment" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TimeSlot" Member="TimeSlots">
+    <Type Name="TimeSlot">
+      <Column Name="timeslot_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="timeslot_time" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="TimeSlot_Appointment" Member="Appointments" ThisKey="timeslot_id" OtherKey="appt_timeslot_id" Type="Appointment" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Vet" Member="Vets">
+    <Type Name="Vet">
+      <Column Name="vet_id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="vet_name" Type="System.String" DbType="VarChar(300) NOT NULL" CanBeNull="false" />
+      <Column Name="vet_doc" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="vet_phone" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="vet_email" Type="System.String" DbType="VarChar(320) NOT NULL" CanBeNull="false" />
+      <Column Name="vet_room_id" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="vet_status" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Vet_Appointment" Member="Appointments" ThisKey="vet_id" OtherKey="appt_vet_id" Type="Appointment" />
+      <Association Name="Room_Vet" Member="Room" ThisKey="vet_room_id" OtherKey="room_id" Type="Room" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
